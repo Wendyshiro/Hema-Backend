@@ -30,13 +30,13 @@ jobs:
     - name: Run unit tests (skip model-dependent tests)
       run: |
         # Run only tests that don't require models
-        pytest test_predict_risk.py -v -k "not predictor" --cov=predict_risk --cov-report=term-missing
+        pytest tests/ -v -k "not predictor" --cov=predict_risk --cov-report=term-missing
       continue-on-error: true
     
     - name: Test code syntax
       run: |
         python -m py_compile predict_risk.py
-        python -m py_compile cervical_train_fixed.py
+        python -m py_compile cervical_train.py
     
     - name: Check imports
       run: |

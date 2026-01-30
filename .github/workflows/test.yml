@@ -58,7 +58,7 @@ jobs:
     
     - name: Run tests with pytest
       run: |
-        pytest test_predict_risk.py -v --cov=predict_risk --cov-report=xml --cov-report=term-missing --cov-report=html
+        pytest tests/ -v --cov=predict_risk --cov-report=xml --cov-report=term-missing --cov-report=html
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
@@ -193,4 +193,3 @@ jobs:
             print('\\n⚠️ Some model files are missing or invalid')
         "
       continue-on-error: true
-      
