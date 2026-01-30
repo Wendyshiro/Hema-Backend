@@ -1,0 +1,63 @@
+name: Tests (Without Models)
+
+# Use this workflow if your model files are too large for GitHub
+# or stored separately (e.g., in cloud storage)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-code:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install pytest pytest-cov
+        pip install pandas numpy scikit-learn xgboost imbalanced-learn joblib openpyxl
+    
+    - name: Run unit tests (skip model-dependent tests)
+      run: |
+        # Run only tests that don't require models
+        pytest test_predict_risk.py -v -k "not predictor" --cov=predict_risk --cov-report=term-missing
+      continue-on-error: true
+    
+    - name: Test code syntax
+      run: |
+        python -m py_compile predict_risk.py
+        python -m py_compile cervical_train_fixed.py
+    
+    - name: Check imports
+      run: |
+        python -c "import sys; sys.path.insert(0, '.'); import predict_risk; print('✅ predict_risk imports successfully')"
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install flake8
+      run: pip install flake8
+    
+    - name: Lint with flake8
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics

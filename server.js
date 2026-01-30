@@ -88,7 +88,7 @@ app.listen(PORT, () => {
 });
 
 // MongoDB connection
-const mongoUri = 'mongodb://localhost:27017/hema';
+const mongoUri = process.env.MONGO_CONNECTION_URL || "mongodb://mongo:27017/hema";
 
 mongoose
   .connect(mongoUri)

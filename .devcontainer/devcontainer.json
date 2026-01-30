@@ -1,0 +1,7 @@
+{
+  "name": "Node + MongoDB Dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [5000, 27017]
+}
